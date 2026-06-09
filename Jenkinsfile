@@ -29,6 +29,7 @@ pipeline{
                             git pull origin ${BRANCH}
                         else
                             git clone --branch ${BRANCH} ${REPO_URL} ${WORKDIR}
+                        fi
                     """
                 }
             }
