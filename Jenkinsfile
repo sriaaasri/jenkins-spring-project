@@ -1,11 +1,63 @@
 pipeline{
     agent any
+    
+    tools {
+        maven "M398"
+    }
+
+    environment{
+        REPO_URL = "https://github.com/sriaaasri/jenkins-spring-project.git"
+        WORKDIR = "${WORKSPACE}/springProject"
+        BRANCH = "main"
+        PROJECT_NAME = "backend"
+        VERSION = 1
+        RUN_TESTS = "true"
+    }
 
     stages{
-        stage("hello world"){
+        stage("Checkout code"){
             steps{
-                echo "${WORKSPACE}"
-                echo "Hello world"
+                script{
+                    echo "Cloning project from ${REPO_URL}"
+                    sh """
+                        if [ -d "${WORKDIR}" ]; then
+                            cd "${WORKDIR}" 
+                            git reset --hard
+                            git checkout ${BRANCH}
+                            git remote remove origin 2 > /dev/null || true
+                            git remote add origin ${REPO_URL}
+                            git pull origin ${BRANCH}
+                        else
+                            git clone --branch ${BRANCH} ${REPO_URL} ${WORKDIR}
+                    """
+                }
+            }
+        }
+
+        stage("Run tests"){
+            when{
+                expression {env.RUN_TESTS == "true"}
+            }
+            steps{
+                script{
+                    echo "Running tests"
+                    sh """
+                        mvn test -Drevision=${VERSION} -DprojectName="${PROJECT_NAME}"
+                        
+                    """
+                }
+            }
+        }
+
+        stage("Package app"){
+            steps{
+                script{
+                    echo "Packaging the application into jar file"
+                    sh """
+                        mvn clean package -DskipTests=true -Drevision=${VERSION} -DprojectName="${PROJECT_NAME}"
+                        archiveArtifacts "target/${PROJECT_NAME}-${VERSION}.jar"
+                    """
+                }
             }
         }
     }
