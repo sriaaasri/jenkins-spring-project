@@ -58,7 +58,9 @@ pipeline {
         steps{
             script{
                 echo "Deploying the appliaction";
+                sh """
                 java -jar "target/${PROJECT_NAME}-${VERSION}.jar" &
+                """
             }
         }
     }
