@@ -5,7 +5,7 @@ pipeline{
         stage("hello world"){
             steps{
                 echo "${WORKSPACE}"
-                echo "Hello world"
+                echhho "Hello world"
             }
         }
     }
