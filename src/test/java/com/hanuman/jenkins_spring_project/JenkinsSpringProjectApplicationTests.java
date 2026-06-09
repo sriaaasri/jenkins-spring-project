@@ -15,8 +15,8 @@ class JenkinsSpringProjectApplicationTests {
 	}
 
 	@Test
-	void test2() {
-		assertEquals(2, 2);
+	void failingTest() {
+		assertEquals(22, 2);
 	}
 
 	@Test
