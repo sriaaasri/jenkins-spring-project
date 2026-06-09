@@ -54,6 +54,14 @@ pipeline {
 
       }
     }
+    stage("Deploy application"){
+        steps{
+            script{
+                echo "Deploying the appliaction";
+                java -jar "target/${PROJECT_NAME}-${VERSION}.jar" &
+            }
+        }
+    }
 
   }
   tools {
