@@ -56,8 +56,9 @@ pipeline{
                     echo "Packaging the application into jar file"
                     sh """
                         mvn clean package -DskipTests=true -Drevision=${VERSION} -DprojectName="${PROJECT_NAME}"
-                        archiveArtifacts "target/${PROJECT_NAME}-${VERSION}.jar"
                     """
+                    archiveArtifacts "target/${PROJECT_NAME}-${VERSION}.jar"
+
                 }
             }
         }
